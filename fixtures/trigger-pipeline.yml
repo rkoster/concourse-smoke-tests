@@ -1,0 +1,26 @@
+---
+resources:
+- name: some-resource
+  type: time
+  source: {interval: 1s}
+
+jobs:
+- name: do-something
+  plan:
+  - get: some-resource
+  - task: print-something
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: {repository: busybox}
+
+      inputs:
+      - name: some-resource
+
+      run:
+        path: sh
+        args:
+        - -c
+        - |
+          ls some-resource/input
