@@ -18,7 +18,8 @@ var (
 	username     string
 	password     string
 
-	flyPath string
+	flyPath           string
+	skipSSLValidation bool
 )
 
 func TestSmoke(t *testing.T) {
@@ -38,6 +39,10 @@ var _ = BeforeSuite(func() {
 	flyPath = os.Getenv("FLY_PATH")
 	if flyPath == "" {
 		flyPath = "fly"
+	}
+
+	if os.Getenv("FLY_SKIP_SSL") == "true" {
+		skipSSLValidation = true
 	}
 })
 
@@ -59,5 +64,10 @@ func spawnFly(argv ...string) *gexec.Session {
 }
 
 func spawnFlyLogin(args ...string) *gexec.Session {
-	return spawnFly(append([]string{"login", "-c", concourseUrl, "-u", username, "-p", password, "-k"}, args...)...)
+	extraArgs := []string{"login", "-c", concourseUrl, "-u", username, "-p", password}
+	if skipSSLValidation {
+		extraArgs = append(extraArgs, "-k")
+	}
+
+	return spawnFly(append(extraArgs, args...)...)
 }

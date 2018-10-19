@@ -9,8 +9,7 @@ import (
 )
 
 var _ = Describe("Concourse Auth", func() {
-
-	FIt("can log into the concourse", func() {
+	It("can log into the concourse", func() {
 		Eventually(func() *gexec.Session {
 			login := spawnFlyLogin()
 			<-login.Exited
