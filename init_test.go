@@ -38,8 +38,8 @@ var _ = BeforeSuite(func() {
 		Fail("CONCOURSE_URL is a required paramter")
 	}
 
-	username = os.Getenv("USERNAME")
-	password = os.Getenv("PASSWORD")
+	username = os.Getenv("CONCOURSE_USERNAME")
+	password = os.Getenv("CONCOURSE_PASSWORD")
 
 	flyPath = os.Getenv("FLY_PATH")
 	if flyPath == "" {

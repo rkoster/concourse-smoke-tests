@@ -8,8 +8,8 @@ Usage:
 
 ```
 pushd concourse-smoke-tests
-  export CONCOURSE_URL=https://my-concourse.example.com
-  export USERNAME=my-username
-  export PASSWORD=my-password
+  export concourse_URL=https://my-concourse.example.com
+  export CONCOURSE_USERNAME=my-username
+  export CONCOURSE_PASSWORD=my-password
   ginkgo -p .
 popd
