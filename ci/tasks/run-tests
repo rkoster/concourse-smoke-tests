@@ -1,0 +1,26 @@
+#!/bin/bash -xeu
+
+function main() {
+  local cwd
+  cwd="${1}"
+
+  export GOPATH="${cwd}/go"
+  export PATH="$PATH:$GOPATH:/usr/local/bin:$GOPATH/bin"
+  export CONCOURSE_SOURCE_FILE="${cwd}/concourse-vars/vars.yml"
+  go get github.com/onsi/ginkgo/ginkgo
+
+  local external_url=$(cat ${CONCOURSE_SOURCE_FILE} | grep external_url | cut -d ' ' -f2 | tr -d '"')
+  if [[ ${FLY_SKIP_SSL} ]]; then
+    wget --no-check-certificate -O fly "${external_url}/api/v1/cli?arch=amd64&platform=linux"
+  else
+    wget -O fly "${external_url}/api/v1/cli?arch=amd64&platform=linux"
+  fi
+  chmod +x fly
+  mv fly /usr/local/bin/
+
+  pushd "${GOPATH}/src/github.com/joshzarrabi/concourse-smoke-tests"
+    ginkgo -r -p .
+  popd
+}
+
+main ${PWD}
