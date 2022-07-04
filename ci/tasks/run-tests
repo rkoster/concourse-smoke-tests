@@ -7,7 +7,7 @@ function main() {
   export GOPATH="${cwd}/go"
   export PATH="$PATH:$GOPATH:/usr/local/bin:$GOPATH/bin"
   export CONCOURSE_SOURCE_FILE="${cwd}/concourse-vars/vars.yml"
-  go get github.com/onsi/ginkgo/ginkgo
+  go install github.com/onsi/ginkgo/ginkgo@latest
 
   local external_url=$(cat ${CONCOURSE_SOURCE_FILE} | grep external_url | cut -d ' ' -f2 | tr -d '"')
   if [[ ${FLY_SKIP_SSL} ]]; then
